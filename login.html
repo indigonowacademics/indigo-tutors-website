@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indigo Academics — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo-deep: #191E6A;
+    --indigo-mid: #232BA0;
+    --indigo-light: #3A45C0;
+    --cream: #F5F1EA;
+    --cream-dark: #EDE7DA;
+    --gold: #5AB4EB;
+    --gold-light: #88CFEF;
+    --white: #FAFAF8;
+    --text-body: #2A2240;
+    --text-muted: #6B6285;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--indigo-deep);
+    color: var(--text-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* BG decoration */
+  .bg-glow {
+    position: fixed; pointer-events: none; z-index: 0;
+  }
+  .bg-glow-1 {
+    top: -200px; left: -150px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(90,180,235,0.18) 0%, transparent 70%);
+  }
+  .bg-glow-2 {
+    bottom: -200px; right: -100px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(35,43,160,0.4) 0%, transparent 70%);
+  }
+
+  /* TOP NAV */
+  .top-bar {
+    position: relative; z-index: 10;
+    padding: 1.4rem 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem; font-weight: 400; color: var(--cream);
+    text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+  .back-link {
+    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: rgba(245,241,234,0.45);
+    text-decoration: none; transition: color 0.2s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .back-link::before { content: '←'; }
+  .back-link:hover { color: var(--gold); }
+
+  /* MAIN LAYOUT */
+  .auth-wrapper {
+    flex: 1; display: flex;
+    align-items: center; justify-content: center;
+    padding: 3rem 5vw; position: relative; z-index: 5;
+  }
+
+  .auth-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%; max-width: 900px;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+  }
+
+  /* LEFT PANEL */
+  .auth-left {
+    background: var(--indigo-mid);
+    padding: 3.5rem 3rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .auth-left::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(90,180,235,0.2) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .auth-left-brand {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem; font-weight: 400; color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+  .auth-left-brand span { color: var(--gold); }
+  .auth-left-tagline {
+    font-size: 0.82rem; color: rgba(245,241,234,0.45);
+    font-weight: 300; letter-spacing: 0.02em;
+  }
+  .auth-left-mid {
+    position: relative; z-index: 1;
+  }
+  .auth-left-headline {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem; font-weight: 300; line-height: 1.15;
+    color: var(--cream); margin-bottom: 1rem;
+  }
+  .auth-left-headline em { font-style: italic; color: var(--gold-light); }
+  .auth-left-body {
+    font-size: 0.9rem; font-weight: 300; color: rgba(245,241,234,0.55);
+    line-height: 1.75;
+  }
+  .auth-left-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin-top: 2rem;
+  }
+  .auth-stat {
+    border-left: 2px solid rgba(90,180,235,0.35);
+    padding-left: 0.9rem;
+  }
+  .auth-stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem; font-weight: 300; color: var(--cream);
+    line-height: 1;
+  }
+  .auth-stat-label {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: rgba(245,241,234,0.35);
+    margin-top: 0.2rem;
+  }
+  .auth-left-footer {
+    font-size: 0.75rem; color: rgba(245,241,234,0.25);
+    font-weight: 300;
+  }
+
+  /* RIGHT PANEL */
+  .auth-right {
+    padding: 3rem 2.8rem;
+    display: flex; flex-direction: column;
+    background: var(--white);
+  }
+
+  /* TABS */
+  .auth-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid rgba(45,31,110,0.1);
+    margin-bottom: 2rem;
+  }
+  .auth-tab {
+    flex: 1; text-align: center; padding: 0.65rem;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted);
+    cursor: pointer; border-bottom: 2px solid transparent;
+    margin-bottom: -1px; transition: color 0.2s, border-color 0.2s;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: 'Outfit', sans-serif;
+  }
+  .auth-tab.active { color: var(--indigo-deep); border-bottom-color: var(--indigo-deep); }
+
+  /* PANELS */
+  .auth-panel { display: none; flex-direction: column; flex: 1; }
+  .auth-panel.active { display: flex; }
+
+  .panel-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem; font-weight: 300; color: var(--indigo-deep);
+    margin-bottom: 0.3rem;
+  }
+  .panel-sub {
+    font-size: 0.84rem; color: var(--text-muted); font-weight: 300;
+    margin-bottom: 1.6rem;
+  }
+
+  .google-btn {
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    width: 100%; padding: 0.75rem;
+    border: 1px solid rgba(45,31,110,0.15); border-radius: 5px;
+    background: var(--white); font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem; font-weight: 500; color: var(--text-body);
+    cursor: pointer; margin-bottom: 1.2rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .google-btn:hover { border-color: var(--indigo-light); box-shadow: 0 2px 8px rgba(45,31,110,0.08); }
+
+  .divider {
+    display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem;
+  }
+  .divider-line { flex: 1; height: 1px; background: rgba(45,31,110,0.1); }
+  .divider-text { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .field { margin-bottom: 1rem; }
+  .field label {
+    display: block; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 0.4rem;
+  }
+  .field input {
+    width: 100%; background: var(--cream);
+    border: 1px solid rgba(45,31,110,0.12); border-radius: 4px;
+    padding: 0.75rem 1rem; font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem; font-weight: 300; color: var(--text-body);
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input:focus {
+    border-color: var(--indigo-light);
+    box-shadow: 0 0 0 3px rgba(58,69,192,0.08);
+  }
+  .field input::placeholder { color: rgba(107,98,133,0.4); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+  .error-msg {
+    font-size: 0.78rem; color: #c0392b;
+    background: rgba(192,57,43,0.06); border-radius: 4px;
+    padding: 0.5rem 0.75rem; margin-bottom: 0.8rem;
+    display: none;
+  }
+
+  .submit-btn {
+    width: 100%; background: var(--indigo-deep); color: var(--cream);
+    font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; border: none;
+    border-radius: 4px; padding: 0.9rem; cursor: pointer;
+    margin-top: 0.4rem; transition: background 0.2s, transform 0.15s;
+  }
+  .submit-btn:hover { background: var(--indigo-light); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+
+  .switch-text {
+    text-align: center; margin-top: 1.2rem;
+    font-size: 0.83rem; color: var(--text-muted); font-weight: 300;
+  }
+  .switch-text a {
+    color: var(--indigo-deep); font-weight: 500; cursor: pointer;
+    text-decoration: none;
+  }
+  .switch-text a:hover { text-decoration: underline; }
+
+  /* Scrollable signup form */
+  .auth-panel.signup-panel { overflow-y: auto; max-height: 70vh; padding-right: 4px; }
+  .auth-panel.signup-panel::-webkit-scrollbar { width: 4px; }
+  .auth-panel.signup-panel::-webkit-scrollbar-track { background: transparent; }
+  .auth-panel.signup-panel::-webkit-scrollbar-thumb { background: rgba(45,31,110,0.15); border-radius: 2px; }
+
+  /* SUCCESS STATE */
+  .success-screen {
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; flex: 1; padding: 2rem 0;
+  }
+  .success-icon {
+    width: 60px; height: 60px; background: var(--indigo-deep);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+  }
+  .success-icon svg { width: 28px; height: 28px; fill: var(--cream); }
+  .success-title {
+    font-family: 'Fraunces', serif; font-size: 1.5rem;
+    font-weight: 300; color: var(--indigo-deep); margin-bottom: 0.4rem;
+  }
+  .success-sub {
+    font-size: 0.88rem; color: var(--text-muted); font-weight: 300;
+    margin-bottom: 1.8rem; line-height: 1.6;
+  }
+  .success-btn {
+    background: var(--indigo-deep); color: var(--cream);
+    font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; border: none;
+    border-radius: 4px; padding: 0.85rem 2rem; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .success-btn:hover { background: var(--indigo-light); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .auth-container { grid-template-columns: 1fr; }
+    .auth-left { display: none; }
+    .auth-right { padding: 2.2rem 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<div class="top-bar">
+  <a class="logo" href="indigo-academics.html"><span>Indigo</span> Academics</a>
+  <a class="back-link" href="indigo-academics.html">Back to site</a>
+</div>
+
+<div class="auth-wrapper">
+  <div class="auth-container">
+
+    <!-- LEFT -->
+    <div class="auth-left">
+      <div>
+        <div class="auth-left-brand"><span>Indigo</span> Academics</div>
+        <div class="auth-left-tagline">Math Tutoring — Grades 3 through 10</div>
+      </div>
+      <div class="auth-left-mid">
+        <div class="auth-left-headline">
+          Your learning<br><em>starts here.</em>
+        </div>
+        <div class="auth-left-body">
+          Sign in or create an account to manage your sessions, track progress, and stay up to date with offers and announcements.
+        </div>
+        <div class="auth-left-stats">
+          <div class="auth-stat">
+            <div class="auth-stat-num">8</div>
+            <div class="auth-stat-label">Grade Levels</div>
+          </div>
+          <div class="auth-stat">
+            <div class="auth-stat-num">30</div>
+            <div class="auth-stat-label">Min Free Trial</div>
+          </div>
+          <div class="auth-stat">
+            <div class="auth-stat-num">1:1</div>
+            <div class="auth-stat-label">Sessions</div>
+          </div>
+          <div class="auth-stat">
+            <div class="auth-stat-num">100%</div>
+            <div class="auth-stat-label">Online</div>
+          </div>
+        </div>
+      </div>
+      <div class="auth-left-footer">
+        &copy; 2025 Indigo Academics. All rights reserved.
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="auth-right">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- SIGN IN PANEL -->
+      <div class="auth-panel active" id="panel-signin">
+        <div class="panel-title">Welcome back.</div>
+        <div class="panel-sub">Sign in to your account to continue.</div>
+
+        <button class="google-btn" onclick="googleAuth()">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">or</div>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="error-msg" id="signin-error">Incorrect email or password. Please try again.</div>
+
+        <div class="field">
+          <label for="si-email">Email Address</label>
+          <input type="email" id="si-email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')signIn()">
+        </div>
+        <div class="field">
+          <label for="si-password">Password</label>
+          <input type="password" id="si-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')signIn()">
+        </div>
+
+        <button class="submit-btn" onclick="signIn()">Sign In</button>
+        <div class="switch-text">Don't have an account? <a onclick="switchTab('signup')">Sign up</a></div>
+      </div>
+
+      <!-- SIGN UP PANEL -->
+      <div class="auth-panel signup-panel" id="panel-signup">
+        <div class="panel-title">Create an account.</div>
+        <div class="panel-sub">Fill in your details to get started.</div>
+
+        <button class="google-btn" onclick="googleAuth()">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          Sign up with Google
+        </button>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">or</div>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="error-msg" id="signup-error">Please fill in all required fields.</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="su-fname">First Name</label>
+            <input type="text" id="su-fname" placeholder="Jane">
+          </div>
+          <div class="field">
+            <label for="su-lname">Last Name</label>
+            <input type="text" id="su-lname" placeholder="Smith">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="su-username">Username</label>
+            <input type="text" id="su-username" placeholder="janesmith">
+          </div>
+          <div class="field">
+            <label for="su-phone">Phone Number</label>
+            <input type="tel" id="su-phone" placeholder="+1 (555) 000-0000">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="su-email">Email Address</label>
+          <input type="email" id="su-email" placeholder="you@example.com">
+        </div>
+
+        <div class="field">
+          <label for="su-password">Password</label>
+          <input type="password" id="su-password" placeholder="Create a strong password">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="su-sfname">Student's First Name</label>
+            <input type="text" id="su-sfname" placeholder="Alex">
+          </div>
+          <div class="field">
+            <label for="su-slname">Student's Last Name</label>
+            <input type="text" id="su-slname" placeholder="Smith">
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="signUp()">Sign Up</button>
+        <div class="switch-text">Already have an account? <a onclick="switchTab('signin')">Sign in</a></div>
+      </div>
+
+      <!-- SUCCESS SCREEN -->
+      <div class="success-screen" id="success-screen">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+        </div>
+        <div class="success-title" id="success-title">You're in.</div>
+        <div class="success-sub" id="success-sub">Welcome to Indigo Academics.</div>
+        <button class="success-btn" onclick="goToDashboard()">Go to Dashboard</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── TAB SWITCHING
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  // ── LOCAL STORAGE HELPERS
+  function getUsers()         { return JSON.parse(localStorage.getItem('ia_users') || '{}'); }
+  function saveUsers(u)       { localStorage.setItem('ia_users', JSON.stringify(u)); }
+  function setCurrentUser(u)  { localStorage.setItem('ia_current_user', JSON.stringify(u)); }
+  function getCurrentUser()   { return JSON.parse(localStorage.getItem('ia_current_user') || 'null'); }
+
+  // ── SIGN IN
+  function signIn() {
+    const email    = document.getElementById('si-email').value.trim();
+    const password = document.getElementById('si-password').value;
+    const err      = document.getElementById('signin-error');
+    const users    = getUsers();
+
+    if (!users[email] || users[email].password !== password) {
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    const user = users[email];
+    setCurrentUser(user);
+    showSuccess('Welcome back, ' + user.fname + '.', 'You\'re now signed in to your Indigo Academics account.');
+  }
+
+  // ── SIGN UP
+  function signUp() {
+    const fname    = document.getElementById('su-fname').value.trim();
+    const lname    = document.getElementById('su-lname').value.trim();
+    const username = document.getElementById('su-username').value.trim();
+    const email    = document.getElementById('su-email').value.trim();
+    const phone    = document.getElementById('su-phone').value.trim();
+    const password = document.getElementById('su-password').value;
+    const sfname   = document.getElementById('su-sfname').value.trim();
+    const slname   = document.getElementById('su-slname').value.trim();
+    const err      = document.getElementById('signup-error');
+
+    if (!fname || !lname || !username || !email || !password || !sfname || !slname) {
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+
+    const users = getUsers();
+    const user = { fname, lname, username, email, phone, password, sfname, slname };
+    users[email] = user;
+    saveUsers(users);
+    setCurrentUser(user);
+    showSuccess('Account created, ' + fname + '.', 'Welcome to Indigo Academics. Head to your dashboard to get started.');
+  }
+
+  // ── GOOGLE AUTH (placeholder — routes to sign up)
+  function googleAuth() {
+    switchTab('signup');
+  }
+
+  // ── SHOW SUCCESS
+  function showSuccess(title, sub) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.style.display = 'none');
+    document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('success-title').textContent = title;
+    document.getElementById('success-sub').textContent   = sub;
+    document.getElementById('success-screen').style.display = 'flex';
+  }
+
+  // ── GO TO DASHBOARD
+  function goToDashboard() {
+    window.location.href = 'indigo-academics.html#dashboard';
+  }
+
+  // ── AUTO REDIRECT IF ALREADY LOGGED IN
+  window.addEventListener('DOMContentLoaded', () => {
+    const user = getCurrentUser();
+    if (user) {
+      window.location.href = 'indigo-academics.html#dashboard';
+    }
+
+    // Check if we came here from the main site's Sign In button
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'signup') switchTab('signup');
+  });
+</script>
+</body>
+</html>
